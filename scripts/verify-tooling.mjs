@@ -1,10 +1,14 @@
 import assert from 'node:assert/strict'
-import { realpathSync } from 'node:fs'
+import { readFileSync, realpathSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { antdvStyleLabel, transformStyleLabels } from 'vite-plugin-antdv-style'
 import { transformVueSfcLess, transformLessToCreateStyles } from '@antdv-next/less2cssinjs'
 
-assert.equal(realpathSync('node_modules/antdv-style'), realpathSync('../antdv-style'))
+const runtimePath = realpathSync('node_modules/antdv-style')
+const siblingRuntimePath = realpathSync('../antdv-style')
+const runtimePackage = JSON.parse(readFileSync('node_modules/antdv-style/package.json', 'utf8'))
+assert.equal(runtimePackage.version, '1.0.0')
+assert.notEqual(runtimePath, siblingRuntimePath)
 await assert.rejects(import('antdv-style/vite'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' })
 await assert.rejects(import('antdv-style/codemod'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' })
 await assert.rejects(import('antdv-style/vite-plugin'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' })
@@ -12,7 +16,7 @@ await assert.rejects(import('antdv-style/less2cssinjs'), { code: 'ERR_PACKAGE_PA
 assert.equal(realpathSync('node_modules/vite-plugin-antdv-style'), realpathSync('../antdv-style/packages/vite-plugin-antdv-style'))
 assert.equal(realpathSync('node_modules/@antdv-next/less2cssinjs'), realpathSync('../antdv-style/packages/less2cssinjs'))
 assert.equal(antdvStyleLabel().name, 'vite-plugin-antdv-style')
-let checks = 8
+let checks = 9
 const script = `import { createStyles } from 'antdv-style'
 const n = <number>1
 const useStyles = createStyles(() => ({ root: { opacity: n } }))`

@@ -20,7 +20,7 @@
   "dependencies": {
     "@antdv-next/cssinjs": "^1.0.6",
     "antdv-next": "^1.5.4",
-    "antdv-style": "link:../antdv-style",
+    "antdv-style": "1.0.0",
     "vue": "3.5.31"
   },
   "devDependencies": {
